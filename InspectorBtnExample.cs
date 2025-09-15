@@ -1,6 +1,6 @@
 using UnityEngine;
 using Assets.KsCode.InspectorBtn;
-public class Example_InspectorBtn : MonoBehaviour {
+public class InspectorBtnExample : MonoBehaviour {
     public string message;
     void Hello(string msg) => Debug.Log(msg);
     public void HelloAction() => Hello(message);

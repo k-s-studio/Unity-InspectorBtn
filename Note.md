@@ -14,8 +14,9 @@
 * InspectorBtnManager cache所有InspectorBtnDrawer
 
 ToDo:
-- [ ] ButtonCacheManager
-- [ ] 整合InspectorBtn和InspectorBtnStatic
-- [ ] InspectorButtonGroup: 一次性宣告多個按鈕(並一次進行所有反射查詢)、可以簡單排版
-- [ ] 可傳入參數
+
+- [x] 整合InspectorBtn和InspectorBtnStatic
 - [ ] button style
+- [ ] 可傳入參數
+- [ ] ButtonCacheManager
+- [ ] InspectorButtonGroup: 一次性宣告多個按鈕(並一次進行所有反射查詢)、可以簡單排版
