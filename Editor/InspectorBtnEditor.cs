@@ -7,6 +7,10 @@ using UnityEngine.UIElements;
 namespace Assets.KsCode.InspectorBtn.Editor {
     [CustomPropertyDrawer(typeof(InspectorBtn))]
     public class InspectorBtnDrawer : PropertyDrawer {
+        // static InspectorBtnDrawer(){
+        //     var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/KsCode/InspectorBtn/InspectorBtnStyle.uss");
+        // }
+        readonly StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/KsCode/InspectorBtn/InspectorBtnStyle.uss");
         private const BindingFlags Filter = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
         public override VisualElement CreatePropertyGUI(SerializedProperty property) {
             var declaringInstance = property.serializedObject.targetObject;
@@ -14,6 +18,8 @@ namespace Assets.KsCode.InspectorBtn.Editor {
             // Debug.Log(declaringInstance.GetType());
             // Debug.Log(target.GetType());
             Button btn = new(GetAction2(target)) { text = target.Text ?? preferredLabel };
+            btn.styleSheets.Add(styleSheet);
+            btn.AddToClassList("ks-inspector-btn");
             //styling...
             return btn;
 
