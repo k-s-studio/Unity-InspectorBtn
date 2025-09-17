@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -12,19 +13,22 @@ namespace Assets.KsCode.InspectorBtn.Editor {
         public override VisualElement CreatePropertyGUI(SerializedProperty property) {
             var declaringInstance = property.serializedObject.targetObject;
             var target = (InspectorBtn)fieldInfo.GetValue(declaringInstance);
-            // Debug.Log(declaringInstance.GetType());
-            // Debug.Log(target.GetType());
+
             Button btn = new(GetAction(target)) { text = target.Text ?? preferredLabel };
             btn.styleSheets.Add(styleSheet);
             btn.AddToClassList("ks-inspector-btn");
-            //styling...
             return btn;
 
             Action GetAction(InspectorBtn btn) => btn.Type switch {
-                ButtonType.NonStatic => () => fieldInfo.DeclaringType.GetMethod(btn.Method, Filter).Invoke(declaringInstance, null),
+                ButtonType.NonStatic => CreateAction(btn.Method),
                 ButtonType.Static => btn.Method,
-                _ => () => Debug.LogWarning($"不對喔: {btn.Type}")
+                _ => () => Debug.LogWarning($"Type: {btn.Type}")
             };
+            Action CreateAction(Method m) {
+                Debug.Log("info!");
+                var methodInfo = fieldInfo.DeclaringType.GetMethod(m.ToString(), Filter);
+                return Delegate.CreateDelegate(typeof(Action), declaringInstance, methodInfo) as Action;
+            }
         }
     }
 }
