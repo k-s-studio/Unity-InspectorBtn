@@ -4,26 +4,23 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Assets.KsCode.InspectorBtn.Editor {
-    [CustomPropertyDrawer(typeof(InspectorBtn))]
+namespace Assets.KsCode.InspectorBtn.deprecated.Editor {
+    [CustomPropertyDrawer(typeof(InspctorBtn))]
     public class InspectorBtnDrawer : PropertyDrawer {
         readonly StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/KsCode/InspectorBtn/InspectorBtnStyle.uss");
         private const BindingFlags Filter = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
         public override VisualElement CreatePropertyGUI(SerializedProperty property) {
             var declaringInstance = property.serializedObject.targetObject;
-            var target = (InspectorBtn)fieldInfo.GetValue(declaringInstance);
-            // Debug.Log(declaringInstance.GetType());
-            // Debug.Log(target.GetType());
-            Button btn = new(GetAction(target)) { text = target.Text ?? preferredLabel };
+            var target = (InspctorBtn)fieldInfo.GetValue(declaringInstance);
+            Button btn = new(GetAction2(target)) { text = target.Text ?? preferredLabel };
             btn.styleSheets.Add(styleSheet);
             btn.AddToClassList("ks-inspector-btn");
-            //styling...
             return btn;
 
-            Action GetAction(InspectorBtn btn) => btn.Type switch {
-                ButtonType.NonStatic => () => fieldInfo.DeclaringType.GetMethod(btn.Method, Filter).Invoke(declaringInstance, null),
-                ButtonType.Static => btn.Method,
-                _ => () => Debug.LogWarning($"不對喔: {btn.Type}")
+            Action GetAction2(InspctorBtn btn) => btn switch {
+                NonStaticButton btn_r => () => fieldInfo.DeclaringType.GetMethod(btn_r.Data.method, Filter).Invoke(declaringInstance, null),
+                StaticButton btn_s => btn_s.Data.method,
+                _ => () => Debug.LogWarning($"不對喔: {btn.GetType()}")
             };
         }
     }
